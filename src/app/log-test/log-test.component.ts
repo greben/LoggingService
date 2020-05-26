@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LogService } from '../shared/log.service';
+import { LogService, LogLevel } from '../shared/log.service';
 
 @Component({
   selector: 'log-test',
@@ -13,6 +13,7 @@ export class LogTestComponent  {
    }
 
    testLog (): void {
-     this.logger.log("This is the Log() method");
+     //this.logger.level = LogLevel.Off;
+     this.logger.log("Test the log() Method", "Paul", "John", 2, 3);
    }
 }
