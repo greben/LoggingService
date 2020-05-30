@@ -10,6 +10,44 @@ export enum LogLevel {
   Off = 6
 }
 
+export class LogEntry {
+  // Public properties
+  entryDate: Date = new Date();
+  message: string = "";
+  level: LogLevel = LogLevel.Debug;
+  extraInfo: any[] = [];
+  logWithDate: boolean = true;
+
+  buildLogString(): string {
+    let ret: string = "";
+
+    if(this.logWithDate) {
+      ret = new Date() + " - ";
+    }
+    ret += "Type: " + LogLevel[this.level];
+    ret += " - Message: " + this.message;
+    if(this.extraInfo.length) {
+      ret += " - Extra Info: " + this.formatParams(this.extraInfo);
+    }
+
+    return ret;
+  }
+
+
+  private formatParams(params: any[]) : string {
+    let ret: string = params.join(",");
+
+    if(params.some(p => typeof p == "object")) {
+      ret = "";
+      for (let item of params) {
+        ret += JSON.stringify(item) + ",";
+      }
+    }
+
+    return ret;
+  }
+}
+
 @Injectable()
 export class LogService {
   level: LogLevel = LogLevel.All;
@@ -49,34 +87,17 @@ export class LogService {
     this.writeToLog(msg, LogLevel.All, optionalParams);
   }
 
-  private formatParams(params: any[]) : string {
-    let ret: string = params.join(",");
-
-    if(params.some(p => typeof p == "object")) {
-      ret = "";
-      for (let item of params) {
-        ret += JSON.stringify(item) + ",";
-      }
-    }
-
-    return ret;
-  }
-
-
   private writeToLog(msg: string, level: LogLevel, params: any[]) {
     if(this.shouldLog(level)) {
-      let value: string = "";
+      let entry: LogEntry = new LogEntry();
 
-      // Build log string
-      if(this.logWithDate) {
-        value = new Date() + " - ";
-      }
-      value += "Type: " + LogLevel[level];
-      value += " - Message: " + JSON.stringify(msg);
-      value += " - Extra Info: " + this.formatParams(params);
+      entry.message = msg;
+      entry.level = level;
+      entry.extraInfo = params;
+      entry.logWithDate = this.logWithDate;
 
       // Log the value
-      console.log(value);
+      console.log(entry.buildLogString());
     }
   }
 }
