@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { LogService } from "./shared/log.service"
 import { LogTestComponent } from './log-test/log-test.component';
-
+import { LogPublishersService } from './shared/log-publishers.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,7 @@ import { LogTestComponent } from './log-test/log-test.component';
   imports: [
     BrowserModule
   ],
-  providers: [LogService],
+  providers: [LogService, LogPublishersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
