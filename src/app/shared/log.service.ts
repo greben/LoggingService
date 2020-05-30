@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { LogPublisher } from "./log-publishers"
+import { Injectable } from '@angular/core';
+import { LogPublisher } from './log-publishers';
 import { LogPublishersService } from './log-publishers.service';
 
 export enum LogLevel {
@@ -34,8 +34,7 @@ export class LogEntry {
 
     return ret;
   }
-
-
+  
   private formatParams(params: any[]) : string {
     let ret: string = params.join(",");
 
@@ -56,10 +55,11 @@ export class LogService {
     // Set all the publishers into the local array
     this.publishers = this.publishersService.publishers;
   }
-    // Public properties
-    level: LogLevel = LogLevel.All;
-    logWithDate: boolean = true;
-    publishers: LogPublisher[];
+
+  // Public properties
+  level: LogLevel = LogLevel.All;
+  logWithDate: boolean = true;
+  publishers: LogPublisher[];
 
   private shouldLog(level: LogLevel) : boolean {
     let ret: boolean = false;
@@ -93,6 +93,12 @@ export class LogService {
 
   log(msg: any, ...optionalParams: any[]) {
     this.writeToLog(msg, LogLevel.All, optionalParams);
+  }
+
+  clear() : void {
+    for(let logger of this.publishers) {
+      logger.clear();
+    }
   }
 
   private writeToLog(msg: string, level: LogLevel, params: any[]) {
