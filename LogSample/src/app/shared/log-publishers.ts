@@ -11,6 +11,12 @@ export abstract class LogPublisher {
   abstract clear() : Observable<boolean>;
 }
 
+export class LogPublisherConfig {
+  loggerName: string;
+  loggerLocation: string;
+  isActive: boolean;
+}
+
 export class LogConsole extends LogPublisher {
   log(record: LogEntry) : Observable<boolean>{
     // Log to the console
@@ -70,13 +76,6 @@ export class LogLocalStorage extends LogPublisher {
     return of(true);
   }
 }
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json'
-    })
-  };
-
 
 export class LogWebApi extends LogPublisher {
   constructor(private http: HttpClient) {
